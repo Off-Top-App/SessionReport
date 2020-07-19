@@ -1,19 +1,19 @@
 package offtop.sessionReportService.Listeners
 
-import offtop.sessionReportService.Models.EndSessionReport
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
+@Service
 class NewUserReportProducer {
     @Autowired
-    lateinit var kafkaTemplate: KafkaTemplate<String, Any>
+    lateinit var kafkaTemplate: KafkaTemplate<String, String>
+
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    fun sendNewUserReport(endUserReport: EndSessionReport) {
+    fun sendNewUserReport(endUserReport: String) {
         kafkaTemplate.send("NewUserReport", endUserReport)
         logger.info(String.format("Producing NewUserReport Event: -> %s", endUserReport));
     }

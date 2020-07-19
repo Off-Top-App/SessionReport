@@ -1,5 +1,6 @@
 package offtop.sessionReportService.Listeners
 
+import offtop.sessionReportService.Models.EndSessionReport
 import offtop.sessionReportService.Services.EndSessionConsumerService
 import offtop.sessionReportService.Services.MessageParserService
 import org.slf4j.LoggerFactory
@@ -9,17 +10,27 @@ import org.springframework.stereotype.Service
 
 @Service
 class EndSessionConsumer {
-
-    private val logger = LoggerFactory.getLogger(javaClass)
     @Autowired
     private lateinit var messageParserService: MessageParserService
     @Autowired
     private lateinit var consumerService: EndSessionConsumerService
+    @Autowired
+    lateinit var sendNewSessionReport: NewSessionReportProducer
+    @Autowired
+    lateinit var sendNewUserReport: NewUserReportProducer
+
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     @KafkaListener(topics = ["EndSession"], groupId = "report")
     fun processMessage(message: String) {
         val consumedData: Map<*, *> = messageParserService.parseMessage(message)
-        consumerService.consumeIncomingEndSession(consumedData)
         logger.info("Got EndSession Request from user: $consumedData")
+
+        val processedData:EndSessionReport = consumerService.consumeIncomingEndSession(consumedData)
+
+        val processedDataToJson:String = messageParserService.toJson(processedData)
+
+        sendNewSessionReport.sendNewSessionReport(processedDataToJson)
+        sendNewUserReport.sendNewUserReport(processedDataToJson)
     }
 }

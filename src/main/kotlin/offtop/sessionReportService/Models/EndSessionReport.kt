@@ -15,9 +15,9 @@ class EndSessionReport constructor(userId: Int, sessionData:List<SessionData>,
 
     @Override
     override fun toString(): String {
-        return "NewSessionReport: [user_id = $userId, session_data = ${sessionData.toString()}" +
-                "average_focus_score = $averageFocusScore, topic = $topic" +
-                "most_used_word = $mostUsedWord, start_time = $startTime" +
+        return "NewSessionReport: [user_id = $userId, session_data = ${sessionData.toString()}, " +
+                "average_focus_score = $averageFocusScore, topic = $topic, " +
+                "most_used_word = $mostUsedWord, start_time = $startTime, " +
                 "end_time = $endTime, session_duration = $sessionDuration]"
     }
 }
