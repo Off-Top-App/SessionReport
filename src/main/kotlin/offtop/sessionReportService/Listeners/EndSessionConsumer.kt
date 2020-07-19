@@ -28,9 +28,7 @@ class EndSessionConsumer {
 
         val processedData:EndSessionReport = consumerService.consumeIncomingEndSession(consumedData)
 
-        val processedDataToJson:String = messageParserService.toJson(processedData)
-
-        sendNewSessionReport.sendNewSessionReport(processedDataToJson)
-        sendNewUserReport.sendNewUserReport(processedDataToJson)
+        sendNewSessionReport.sendNewSessionReport(processedData)
+        sendNewUserReport.sendNewUserReport(processedData)
     }
 }
