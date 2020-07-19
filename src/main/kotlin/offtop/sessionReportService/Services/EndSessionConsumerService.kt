@@ -19,7 +19,7 @@ class EndSessionConsumerService{
     }
 
     fun consumeIncomingEndSession(consumeIncomingEndSession: Map<*,*>): EndSessionReport {
-        var incomingEndSession: EndSession  = getIncomingEndSession(consumeIncomingEndSession)
+        var incomingEndSession: EndSession = getIncomingEndSession(consumeIncomingEndSession)
 
 
         return processData.kafkaStreams(incomingEndSession)

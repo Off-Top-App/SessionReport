@@ -23,11 +23,9 @@ class EndSessionConsumer {
 
     @KafkaListener(topics = ["EndSession"], groupId = "report")
     fun processMessage(message: String) {
+        logger.info("Got EndSession Request from user: $message")
         val consumedData: Map<*, *> = messageParserService.parseMessage(message)
-        logger.info("Got EndSession Request from user: $consumedData")
-
         val processedData:EndSessionReport = consumerService.consumeIncomingEndSession(consumedData)
-
         sendNewSessionReport.sendNewSessionReport(processedData)
         sendNewUserReport.sendNewUserReport(processedData)
     }

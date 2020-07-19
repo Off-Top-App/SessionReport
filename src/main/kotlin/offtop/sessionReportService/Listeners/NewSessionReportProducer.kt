@@ -20,6 +20,6 @@ class NewSessionReportProducer {
     fun sendNewSessionReport(endSessionReport: EndSessionReport) {
         val serializedData:String = messageParserService.toJson(endSessionReport)
         kafkaTemplate.send("NewSessionReport", serializedData)
-        logger.info(String.format("Producing NewSessionReport Event: -> %s", endSessionReport));
+        logger.info("Producing NewSessionReport Event: -> $serializedData")
     }
 }
