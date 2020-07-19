@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service
 class NewUserReportProducer {
     @Autowired
     lateinit var kafkaTemplate: KafkaTemplate<String, String>
+
     @Autowired
     private lateinit var messageParserService: MessageParserService
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     fun sendNewUserReport(endUserReport: EndSessionReport) {
-        val serializedData:String = messageParserService.toJson(endUserReport)
+        val serializedData: String = messageParserService.toJson(endUserReport)
         kafkaTemplate.send("NewUserReport", serializedData)
         logger.info("Producing NewUserReport Event: -> $serializedData")
     }

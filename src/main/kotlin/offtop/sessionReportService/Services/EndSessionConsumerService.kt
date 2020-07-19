@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class EndSessionConsumerService{
+class EndSessionConsumerService {
     @Autowired
     lateinit var processData: DataProcessingService
 
@@ -18,10 +18,8 @@ class EndSessionConsumerService{
         )
     }
 
-    fun consumeIncomingEndSession(consumeIncomingEndSession: Map<*,*>): EndSessionReport {
+    fun consumeIncomingEndSession(consumeIncomingEndSession: Map<*, *>): EndSessionReport {
         var incomingEndSession: EndSession = getIncomingEndSession(consumeIncomingEndSession)
-
-
         return processData.kafkaStreams(incomingEndSession)
     }
 }

@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class SessionReportServiceApplication
 
 fun main(args: Array<String>) {
-	runApplication<SessionReportServiceApplication>(*args)
+    runApplication<SessionReportServiceApplication>(*args)
 }

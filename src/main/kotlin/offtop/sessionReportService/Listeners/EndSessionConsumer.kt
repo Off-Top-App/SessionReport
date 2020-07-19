@@ -12,10 +12,13 @@ import org.springframework.stereotype.Service
 class EndSessionConsumer {
     @Autowired
     private lateinit var messageParserService: MessageParserService
+
     @Autowired
     private lateinit var consumerService: EndSessionConsumerService
+
     @Autowired
     lateinit var sendNewSessionReport: NewSessionReportProducer
+
     @Autowired
     lateinit var sendNewUserReport: NewUserReportProducer
 
@@ -25,7 +28,7 @@ class EndSessionConsumer {
     fun processMessage(message: String) {
         logger.info("Got EndSession Request from user: $message")
         val consumedData: Map<*, *> = messageParserService.parseMessage(message)
-        val processedData:EndSessionReport = consumerService.consumeIncomingEndSession(consumedData)
+        val processedData: EndSessionReport = consumerService.consumeIncomingEndSession(consumedData)
         sendNewSessionReport.sendNewSessionReport(processedData)
         sendNewUserReport.sendNewUserReport(processedData)
     }
