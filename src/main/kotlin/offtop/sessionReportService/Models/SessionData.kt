@@ -12,8 +12,8 @@ class SessionData constructor(session_mode: String, focus_score: Boolean,
 
     @Override
     override fun toString(): String {
-        return "session_data: [session_mode = $session_mode, focus_score = $focus_score, " +
+        return "session_data: session_mode = $session_mode, focus_score = $focus_score, " +
                 "focus_value = $focus_value, analyzed_at = $analyzed_at, " +
-                "transcribed_speech = $transcribed_speech, topic = $topic]"
+                "transcribed_speech = $transcribed_speech, topic = $topic"
     }
 }
