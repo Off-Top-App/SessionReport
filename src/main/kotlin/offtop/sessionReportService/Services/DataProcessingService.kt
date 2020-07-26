@@ -1,26 +1,35 @@
 package offtop.sessionReportService.Services
 
+import com.google.gson.Gson
 import offtop.sessionReportService.Models.EndSession
 import offtop.sessionReportService.Models.EndSessionReport
-import offtop.sessionReportService.Models.SessionData
+import org.apache.kafka.common.serialization.Serdes
+import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.kstream.KStream
+import org.apache.kafka.streams.kstream.Produced
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class DataProcessingService {
-    fun kafkaStreams(endSession: EndSession): EndSessionReport {
-        var userId: Int = endSession.user_id
-        var sessionData: List<SessionData> = endSession.session_data
-        var averageFocusScore: Int = 1
-        var topic: String = "test"
-        var mostUsedWord: List<String> = listOf("test1", "test2", "test3")
-        var startTime: String = "09:30"
-        var endTime: String = "09:45"
-        var sessionDuration: String = "15"
-        
-        return EndSessionReport(userId = userId, sessionData = sessionData,
-                averageFocusScore = averageFocusScore, topic = topic,
-                mostUsedWord = mostUsedWord, startTime = startTime,
-                endTime = endTime, sessionDuration = sessionDuration)
+    fun processEndSessionReport(endSessionStream: KStream<String, EndSession>) {
+        var processDataAndProduce: KStream<String, String> = endSessionStream.map { _, pointer ->
+            var userId:Int = pointer.user_id
+            var endSessionReport: EndSessionReport = EndSessionReport(
+                    userId = pointer.user_id,
+                    sessionData = pointer.session_data,
+                    averageFocusScore = 0, //averageFocusScore = pointer.session_data,
+                    topic = pointer.session_data[0].topic,
+                    mostUsedWord = listOf("default1", "default2", "default3"), //mostUsedWord =
+                    startTime = pointer.session_data[0].analyzed_at,
+                    endTime = pointer.session_data.last().analyzed_at,
+                    sessionDuration = "default" //sessionDuration = (parseInt(endTime) - parseInt(startTime)).toString()),
+            )
+            var endSessionReportJson:String = Gson().toJson(endSessionReport)
+            return@map KeyValue("$userId", endSessionReportJson)
+        }
+
+        processDataAndProduce.to("NewSessionReport", Produced.with(Serdes.String(), Serdes.String()))
+        processDataAndProduce.to("NewUserReport", Produced.with(Serdes.String(), Serdes.String()))
     }
 }

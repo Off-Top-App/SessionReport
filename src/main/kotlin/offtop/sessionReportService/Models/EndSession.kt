@@ -1,6 +1,9 @@
 package offtop.sessionReportService.Models
 
-class EndSession constructor(userId: Int, sessionData: List<SessionData>) {
+class EndSession constructor(
+        userId: Int,
+        sessionData: List<SessionData>
+) {
     var user_id: Int = userId
     var session_data: List<SessionData> = sessionData
 

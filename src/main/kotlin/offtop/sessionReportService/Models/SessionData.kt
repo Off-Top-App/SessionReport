@@ -1,8 +1,13 @@
 package offtop.sessionReportService.Models
 
-class SessionData constructor(session_mode: String, focus_score: Boolean,
-                              focus_value: Int, analyzed_at: String,
-                              transcribed_speech: String, topic: String) {
+class SessionData constructor(
+        session_mode: String,
+        focus_score: Boolean,
+        focus_value: Int,
+        analyzed_at: String,
+        transcribed_speech: String,
+        topic: String
+) {
     var session_mode: String = session_mode
     var focus_score: Boolean = focus_score
     var focus_value: Int = focus_value

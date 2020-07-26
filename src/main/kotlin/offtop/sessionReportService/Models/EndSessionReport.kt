@@ -1,9 +1,15 @@
 package offtop.sessionReportService.Models
 
-class EndSessionReport constructor(userId: Int, sessionData: List<SessionData>,
-                                   averageFocusScore: Int, topic: String,
-                                   mostUsedWord: List<String>, startTime: String,
-                                   endTime: String, sessionDuration: String) {
+class EndSessionReport constructor(
+        userId: Int,
+        sessionData: List<SessionData>,
+        averageFocusScore: Int,
+        topic: String,
+        mostUsedWord: List<String>,
+        startTime: String,
+        endTime: String,
+        sessionDuration: String
+) {
     var user_id: Int = userId
     var session_data: List<SessionData> = sessionData
     var average_focus_score: Int = averageFocusScore

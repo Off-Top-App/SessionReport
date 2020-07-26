@@ -1,25 +1,22 @@
 package offtop.sessionReportService.Services
 
+import com.google.gson.Gson
 import offtop.sessionReportService.Models.EndSession
 import offtop.sessionReportService.Models.EndSessionReport
-import offtop.sessionReportService.Models.SessionData
+import org.apache.kafka.streams.kstream.KStream
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class EndSessionConsumerService {
     @Autowired
-    lateinit var processData: DataProcessingService
+    lateinit var processingService: DataProcessingService
 
-    private fun getIncomingEndSession(incomingEndSession: Map<*, *>): EndSession {
-        return EndSession(
-                userId = incomingEndSession["user_id"].toString().toDouble().toInt(),
-                sessionData = incomingEndSession["session_data"] as List<SessionData>
-        )
-    }
-
-    fun consumeIncomingEndSession(consumeIncomingEndSession: Map<*, *>): EndSessionReport {
-        var incomingEndSession: EndSession = getIncomingEndSession(consumeIncomingEndSession)
-        return processData.kafkaStreams(incomingEndSession)
+    fun consumeIncomingEndSession(endSessionJsonStream: KStream<String, String>) {
+        val endSessionStream: KStream<String, EndSession> = endSessionJsonStream.mapValues { value ->
+            return@mapValues Gson().fromJson(value, EndSession::class.java)
+        }
+        processingService.processEndSessionReport(endSessionStream)
     }
 }

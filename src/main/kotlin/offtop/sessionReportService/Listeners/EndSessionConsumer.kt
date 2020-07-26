@@ -1,35 +1,34 @@
 package offtop.sessionReportService.Listeners
 
-import offtop.sessionReportService.Models.EndSessionReport
 import offtop.sessionReportService.Services.EndSessionConsumerService
-import offtop.sessionReportService.Services.MessageParserService
-import org.slf4j.LoggerFactory
+import org.apache.kafka.common.serialization.Serdes
+import org.apache.kafka.streams.KafkaStreams
+import org.apache.kafka.streams.StreamsBuilder
+import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.kstream.Consumed
+import org.apache.kafka.streams.kstream.KStream
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class EndSessionConsumer {
     @Autowired
-    private lateinit var messageParserService: MessageParserService
-
-    @Autowired
     private lateinit var consumerService: EndSessionConsumerService
 
-    @Autowired
-    lateinit var sendNewSessionReport: NewSessionReportProducer
+    var topic = "EndSession"
 
     @Autowired
-    lateinit var sendNewUserReport: NewUserReportProducer
-
-    private val logger = LoggerFactory.getLogger(javaClass)
-
-    @KafkaListener(topics = ["EndSession"], groupId = "report")
-    fun processMessage(message: String) {
-        logger.info("Got EndSession Request from user: $message")
-        val consumedData: Map<*, *> = messageParserService.parseMessage(message)
-        val processedData: EndSessionReport = consumerService.consumeIncomingEndSession(consumedData)
-        sendNewSessionReport.sendNewSessionReport(processedData)
-        sendNewUserReport.sendNewUserReport(processedData)
+    fun processMessage() {
+        val streamsBuilder = StreamsBuilder()
+        val endSessionJsonStream: KStream<String, String> = streamsBuilder
+                .stream(topic, Consumed.with(Serdes.String(), Serdes.String()))
+        consumerService.consumeIncomingEndSession(endSessionJsonStream)
+        val topology: Topology = streamsBuilder.build()
+        val props = Properties()
+        props["bootstrap.servers"] = "localhost:9092"
+        props["application.id"] = "report"
+        val streams = KafkaStreams(topology, props)
+        streams.start()
     }
 }
