@@ -5,6 +5,7 @@ class SessionData constructor(
         focus_score: Boolean,
         focus_value: Int,
         analyzed_at: String,
+        time_exported: String,
         transcribed_speech: String,
         topic: String
 ) {
@@ -12,6 +13,7 @@ class SessionData constructor(
     var focus_score: Boolean = focus_score
     var focus_value: Int = focus_value
     var analyzed_at: String = analyzed_at
+    var time_exported: String = time_exported
     var transcribed_speech: String = transcribed_speech
     var topic: String = topic
 
@@ -19,6 +21,7 @@ class SessionData constructor(
     override fun toString(): String {
         return "session_data: session_mode = $session_mode, focus_score = $focus_score, " +
                 "focus_value = $focus_value, analyzed_at = $analyzed_at, " +
-                "transcribed_speech = $transcribed_speech, topic = $topic"
+                "time_exported = ${time_exported}, transcribed_speech = $transcribed_speech, " +
+                "topic = $topic"
     }
 }
