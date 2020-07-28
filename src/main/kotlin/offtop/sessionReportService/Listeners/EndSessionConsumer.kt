@@ -5,6 +5,7 @@ import offtop.sessionReportService.Services.EndSessionConsumerService
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,7 +24,7 @@ class EndSessionConsumer {
 
     var topic = "EndSession"
 
-    @Autowired
+    @Bean
     fun processMessage() {
         val streamsBuilder = StreamsBuilder()
 
