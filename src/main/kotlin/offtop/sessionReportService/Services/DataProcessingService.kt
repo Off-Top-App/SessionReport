@@ -15,8 +15,7 @@ class DataProcessingService {
         var i: Double = 0.0
         var score: Double = 0.0
         pointer.session_data.indices.forEach { value: Int ->
-            score +=
-                    pointer.session_data[value].focus_value
+            score += pointer.session_data[value].focus_value
             i++
         }
         return score / i
