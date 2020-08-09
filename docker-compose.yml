@@ -1,0 +1,14 @@
+version: '3'
+services:
+  session-report:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: session-report:1.0
+    ports:
+      - 8030:8030
+
+networks:
+  default:
+    external:
+      name: offtop-network
