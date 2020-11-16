@@ -12,7 +12,10 @@ class KafkaStreamsFactory {
         val topology: Topology = streamsBuilder.build()
 
         val props = Properties()
-        props["bootstrap.servers"] = "localhost:9092"
+        //UNCOMMENT THE LINE BELOW IF YOU WANT TO USE DOCKER KAFKA
+        props["bootstrap.servers"] = "kafka:9092"
+        //UNCOMMENT THE LINE BELOW IF YOU WANT TO USE LOCAL KAFKA
+        //props["bootstrap.servers"] = "localhost:9092"  
         props["application.id"] = "report"
 
         val streams = KafkaStreams(topology, props)
